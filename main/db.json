@@ -1,0 +1,31 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "firstName": "James",
+      "lastName": "McGill",
+      "dob": "01/12/1968",
+      "phone": "800-555-5550",
+      "address": "123 Chestnut LN, Mesa Verde, NM 75683",
+      "notes": "Shady lawyer"
+    },
+    {
+      "id": 2,
+      "firstName": "Harvey",
+      "lastName": "Specter",
+      "dob": "06/29/1977",
+      "phone": "800-555-5505",
+      "address": "30th Street Apt 841, New York City, NY 93458",
+      "notes": "Corporate lawyer"
+    },
+    {
+      "id": 3,
+      "firstName": "Bruce",
+      "lastName": "Wayne",
+      "dob": "08/13/1989",
+      "phone": "800-555-5555",
+      "address": "1140 Arkham Dr, Gotham, RI 58910",
+      "notes": null
+    }
+  ]
+}

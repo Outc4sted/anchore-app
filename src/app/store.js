@@ -1,8 +1,10 @@
 import { configureStore } from '@reduxjs/toolkit';
-import counterReducer from '../features/counter/counterSlice';
+import userTableReducer from '../features/userTable/userTableSlice';
+import userFormReducer from '../features/userForm/userFormSlice';
 
 export default configureStore({
   reducer: {
-    counter: counterReducer,
+    userTable: userTableReducer,
+    userForm: userFormReducer,
   },
 });
