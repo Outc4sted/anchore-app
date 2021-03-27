@@ -10,12 +10,13 @@ export const userFormSlice = createSlice({
       phone: null,
       address: null,
       notes: null,
-    }
+    },
+    openEditUser: false,
   },
   reducers: {
-    openUserForm: state => {
-      console.log('state.isOpen', state.isOpen)
-      state.isOpen = true;
+    toggleUserForm: (state, data) => {
+      state.openEditUser = !state.openEditUser;
+      state.user = data?.payload || {};
     },
     saveUser: async (state, {payload: { user }}) => {
       console.log('saveUser - user', user)
@@ -41,7 +42,10 @@ export const userFormSlice = createSlice({
   },
 });
 
-export const { openUserForm, saveUser } = userFormSlice.actions;
+export const { toggleUserForm, saveUser } = userFormSlice.actions;
+
+
+export const selectOpenEditUser = ({ userForm }) => userForm.openEditUser;
 
 
 export default userFormSlice.reducer;

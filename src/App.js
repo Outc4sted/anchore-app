@@ -1,6 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
-import { UserForm } from './features/userForm/UserForm';
+import UserForm from './features/userForm';
 import { UserTable } from './features/userTable/UserTable';
 import './App.css';
 

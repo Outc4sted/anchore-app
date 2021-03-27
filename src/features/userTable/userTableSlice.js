@@ -8,9 +8,6 @@ export const userTableSlice = createSlice({
     error: null,
   },
   reducers: {
-    editUser: (userId) => {
-      console.log('editUser id', userId);
-    },
     deleteUser: (userId) => {
       console.log('deleteUser id', userId);
     },

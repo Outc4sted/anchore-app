@@ -1,13 +1,10 @@
 import React, { useState, useEffect } from 'react';
+import styles from './UserTable.module.css';
 import { useDispatch } from 'react-redux';
 import {
-  editUser,
   deleteUser,
 } from './userTableSlice';
-import {
-  openUserForm,
-} from '../userForm/userFormSlice';
-import styles from './UserTable.module.css';
+import { toggleUserForm } from '../userForm/userFormSlice';
 import {
   Table,
   Thead,
@@ -30,8 +27,9 @@ export function UserTable() {
   const [users, setUsers] = useState([]);
 
   const _editUser = userId => {
-    dispatch(openUserForm());
-    dispatch(editUser(userId));
+    const user = users.find(({ id }) => userId === id);
+    console.log('_edit user', user)
+    dispatch(toggleUserForm(user));
   };
 
   useEffect(() => {

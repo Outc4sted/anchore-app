@@ -1,6 +1,9 @@
 import React from "react";
-import { useDispatch, connect } from 'react-redux';
-import { saveUser } from './userFormSlice';
+import { useSelector, useDispatch, connect } from 'react-redux';
+import {
+  saveUser,
+  selectOpenEditUser,
+} from './userFormSlice';
 import styles from './UserForm.module.css';
 import {
   useDisclosure,
@@ -22,6 +25,7 @@ import { AddIcon } from "@chakra-ui/icons";
 import * as yup from 'yup';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
+import { toggleUserForm } from './userFormSlice';
 
 const schema = yup.object().shape({
   firstName: yup.string().required(),
@@ -32,24 +36,31 @@ const schema = yup.object().shape({
   notes: yup.string(),
 });
 
-const mapStateToProps = (state, ownProps) => {
-  console.log('ownProps', ownProps)
+const mapStateToProps = ({ userForm }) => {
+  let currentUser;
 
+  if (userForm.user) {
+    const d = new Date(userForm.user.dob)
+    const datestring = d.getFullYear() + "-" + (d.getMonth()+1).toString().padStart(2,'0') + "-" + d.getDate().toString().padStart(2,'0')
+    currentUser = { ...userForm.user, dob: datestring };
+  }
   return {
-    c: 'just testing thanks',
-  };
+    currentUser,
+  }
 }
 
-export function UserForm() {
-  const dispatch = useDispatch();
-  const { isOpen, onOpen, onClose } = useDisclosure();
+const UserForm = ({ currentUser }) => {
+  console.log('mapStateToProps - currentUser', currentUser)
 
+  const dispatch = useDispatch();
+  const { isOpen, onOpen, onClose } = useDisclosure({
+    onClose: () => dispatch(toggleUserForm()),
+  });
   const { register, handleSubmit, errors } = useForm({
     mode: 'onBlur',
     // resolver: yupResolver(schema),
   });
-
-  const onSubmit = user => dispatch(saveUser({ user }));
+  const openEditUser = useSelector(selectOpenEditUser);
 
   return (
     <>
@@ -58,7 +69,7 @@ export function UserForm() {
       </div>
 
       <Modal
-        isOpen={isOpen}
+        isOpen={isOpen || openEditUser}
         onClose={onClose}
         >
         <ModalOverlay />
@@ -73,7 +84,11 @@ export function UserForm() {
                 errortext={errors?.firstName?.message}
               >
                 <FormLabel>First name</FormLabel>
-                <Input ref={register} name="firstName" />
+                <Input
+                  ref={register}
+                  name="firstName"
+                  defaultValue={currentUser.firstName}
+                />
                 <FormErrorMessage>{errors?.firstName?.message}</FormErrorMessage>
               </FormControl>
 
@@ -83,7 +98,11 @@ export function UserForm() {
                 errortext={errors?.lastName?.message}
               >
                 <FormLabel>Last name</FormLabel>
-                <Input ref={register} name="lastName" />
+                <Input
+                  ref={register}
+                  name="lastName"
+                  defaultValue={currentUser.lastName}
+                />
                 <FormErrorMessage>{errors?.lastName?.message}</FormErrorMessage>
               </FormControl>
 
@@ -93,7 +112,12 @@ export function UserForm() {
                 errortext={errors?.dob?.message}
               >
                 <FormLabel>Date of birth</FormLabel>
-                <Input ref={register} name="dob" type="date" />
+                <Input
+                  ref={register}
+                  name="dob"
+                  defaultValue={currentUser.dob}
+                  type="date"
+                />
                 <FormErrorMessage>{errors?.dob?.message}</FormErrorMessage>
               </FormControl>
 
@@ -103,7 +127,11 @@ export function UserForm() {
                 errortext={errors?.phone?.message}
               >
                 <FormLabel>Phone</FormLabel>
-                <Input ref={register} name="phone" />
+                <Input
+                  ref={register}
+                  name="phone"
+                  defaultValue={currentUser.phone}
+                />
                 <FormErrorMessage>{errors?.phone?.message}</FormErrorMessage>
               </FormControl>
 
@@ -113,18 +141,27 @@ export function UserForm() {
                 errortext={errors?.address?.message}
               >
                 <FormLabel>Address</FormLabel>
-                <Input ref={register} name="address" />
+                <Input
+                  ref={register}
+                  name="address"
+                  defaultValue={currentUser.address}
+                />
                 <FormErrorMessage>{errors?.address?.message}</FormErrorMessage>
               </FormControl>
 
               <FormControl>
                 <FormLabel>Notes</FormLabel>
-                <Textarea placeholder="I need to remember this..." ref={register} name="notes" />
+                <Textarea
+                  placeholder="I need to remember this..."
+                  ref={register}
+                  name="notes"
+                  defaultValue={currentUser.notes}
+                />
               </FormControl>
             </ModalBody>
 
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={handleSubmit(onSubmit)}>
+              <Button colorScheme="blue" mr={3} onClick={handleSubmit(user => dispatch(saveUser({ user })))}>
                 Save
               </Button>
               <Button onClick={onClose}>Cancel</Button>
@@ -136,4 +173,4 @@ export function UserForm() {
   );
 }
 
-export default connect(mapStateToProps)(UserForm)
+export default connect(mapStateToProps)(UserForm);
