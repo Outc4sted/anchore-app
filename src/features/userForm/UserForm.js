@@ -40,7 +40,7 @@ const mapStateToProps = (state, ownProps) => {
   };
 }
 
- function UserForm() {
+export function UserForm() {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure();
 
