@@ -1,5 +1,6 @@
 import React from 'react';
 import logo from './logo.svg';
+import { UserForm } from './features/userForm/UserForm';
 import { UserTable } from './features/userTable/UserTable';
 import './App.css';
 
@@ -11,6 +12,7 @@ function App() {
         <h1>Your Favorite People</h1>
       </header>
 
+      <UserForm />
       <UserTable />
     </div>
   );

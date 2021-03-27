@@ -8,16 +8,15 @@ export const userTableSlice = createSlice({
     error: null,
   },
   reducers: {
-    editUser: () => {
-      console.log('editUser')
+    editUser: (userId) => {
+      console.log('editUser id', userId);
     },
-    deleteUser: () => {
-      console.log('deleteUser')
+    deleteUser: (userId) => {
+      console.log('deleteUser id', userId);
     },
   },
 });
 
-export const { editUser, deleteUser } = userTableSlice.actions;
-
+export const { addUser, editUser, deleteUser } = userTableSlice.actions;
 
 export default userTableSlice.reducer;

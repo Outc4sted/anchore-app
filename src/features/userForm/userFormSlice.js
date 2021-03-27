@@ -13,16 +13,35 @@ export const userFormSlice = createSlice({
     }
   },
   reducers: {
-    saveUser: state => {
-      console.log('saveUser - state.user', state.user)
+    openUserForm: state => {
+      console.log('state.isOpen', state.isOpen)
+      state.isOpen = true;
     },
-    closeModal: () => {
-      console.log('closeModal')
+    saveUser: async (state, {payload: { user }}) => {
+      console.log('saveUser - user', user)
+
+      const response = await fetch("https://my-json-server.typicode.com/Outc4sted/anchore-app/users", {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(user)
+      })
+        .then(res => res.json())
+        .then(
+          result => {
+            console.log('result', result)
+          },
+          error => {
+            console.log('error', error)
+          }
+        );
+      return response.json()
     },
   },
 });
 
-export const { saveUser, closeModal } = userFormSlice.actions;
+export const { openUserForm, saveUser } = userFormSlice.actions;
 
 
 export default userFormSlice.reducer;
