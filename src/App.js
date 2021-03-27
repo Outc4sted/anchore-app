@@ -8,8 +8,10 @@ function App() {
     <div className="App">
       <header className="App-header">
         <img src={logo} className="App-logo" alt="logo" />
-        <UserTable />
+        <h1>Your Favorite People</h1>
       </header>
+
+      <UserTable />
     </div>
   );
 }

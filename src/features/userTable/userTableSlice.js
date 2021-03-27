@@ -4,20 +4,20 @@ export const userTableSlice = createSlice({
   name: 'userTable',
   initialState: {
     users: [],
-    loading: false,
-    editing: false,
+    isLoaded: false,
+    error: null,
   },
   reducers: {
-    loadUsers: state => {
-      console.log('loadUsers')
-    },
     editUser: () => {
       console.log('editUser')
+    },
+    deleteUser: () => {
+      console.log('deleteUser')
     },
   },
 });
 
-export const { loadUsers, editUser } = userTableSlice.actions;
+export const { editUser, deleteUser } = userTableSlice.actions;
 
 
 export default userTableSlice.reducer;

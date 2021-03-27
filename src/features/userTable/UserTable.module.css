@@ -1,4 +1,11 @@
-td[colspan="6"] {
+td[colspan] {
   text-align: center;
-  font-size: 0.5em;
+}
+
+td:last-child {
+  text-align: right;
+}
+
+button:first-child {
+  margin-right: 12px;
 }
