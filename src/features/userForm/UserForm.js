@@ -1,9 +1,10 @@
 import React from "react";
-import { useSelector, useDispatch, connect } from 'react-redux';
+import { useDispatch, connect } from 'react-redux';
 import {
-  saveUser,
-  selectOpenEditUser,
+  createUser,
+  updateUser,
 } from './userFormSlice';
+import { getAllUsers } from '../userTable/userTableSlice';
 import styles from './UserForm.module.css';
 import {
   useDisclosure,
@@ -39,28 +40,39 @@ const schema = yup.object().shape({
 const mapStateToProps = ({ userForm }) => {
   let currentUser;
 
-  if (userForm.user) {
+  if (userForm.user.firstName) {
     const d = new Date(userForm.user.dob)
     const datestring = d.getFullYear() + "-" + (d.getMonth()+1).toString().padStart(2,'0') + "-" + d.getDate().toString().padStart(2,'0')
     currentUser = { ...userForm.user, dob: datestring };
   }
   return {
     currentUser,
+    openEditUser: userForm.openEditUser,
   }
 }
 
-const UserForm = ({ currentUser }) => {
-  console.log('mapStateToProps - currentUser', currentUser)
-
+const UserForm = ({ currentUser, openEditUser }) => {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure({
     onClose: () => dispatch(toggleUserForm()),
   });
   const { register, handleSubmit, errors } = useForm({
     mode: 'onBlur',
-    // resolver: yupResolver(schema),
+    resolver: yupResolver(schema),
   });
-  const openEditUser = useSelector(selectOpenEditUser);
+
+  const _createUser = user => {
+    dispatch(onClose);
+    dispatch(createUser({ user }));
+    dispatch(getAllUsers());
+  };
+
+  const _updateUser = user => {
+    user.id = currentUser.id
+    dispatch(onClose);
+    dispatch(updateUser({ user }));
+    dispatch(getAllUsers());
+  };
 
   return (
     <>
@@ -87,7 +99,7 @@ const UserForm = ({ currentUser }) => {
                 <Input
                   ref={register}
                   name="firstName"
-                  defaultValue={currentUser.firstName}
+                  defaultValue={currentUser?.firstName}
                 />
                 <FormErrorMessage>{errors?.firstName?.message}</FormErrorMessage>
               </FormControl>
@@ -101,7 +113,7 @@ const UserForm = ({ currentUser }) => {
                 <Input
                   ref={register}
                   name="lastName"
-                  defaultValue={currentUser.lastName}
+                  defaultValue={currentUser?.lastName}
                 />
                 <FormErrorMessage>{errors?.lastName?.message}</FormErrorMessage>
               </FormControl>
@@ -115,7 +127,7 @@ const UserForm = ({ currentUser }) => {
                 <Input
                   ref={register}
                   name="dob"
-                  defaultValue={currentUser.dob}
+                  defaultValue={currentUser?.dob}
                   type="date"
                 />
                 <FormErrorMessage>{errors?.dob?.message}</FormErrorMessage>
@@ -130,7 +142,7 @@ const UserForm = ({ currentUser }) => {
                 <Input
                   ref={register}
                   name="phone"
-                  defaultValue={currentUser.phone}
+                  defaultValue={currentUser?.phone}
                 />
                 <FormErrorMessage>{errors?.phone?.message}</FormErrorMessage>
               </FormControl>
@@ -144,7 +156,7 @@ const UserForm = ({ currentUser }) => {
                 <Input
                   ref={register}
                   name="address"
-                  defaultValue={currentUser.address}
+                  defaultValue={currentUser?.address}
                 />
                 <FormErrorMessage>{errors?.address?.message}</FormErrorMessage>
               </FormControl>
@@ -155,15 +167,21 @@ const UserForm = ({ currentUser }) => {
                   placeholder="I need to remember this..."
                   ref={register}
                   name="notes"
-                  defaultValue={currentUser.notes}
+                  defaultValue={currentUser?.notes}
                 />
               </FormControl>
             </ModalBody>
 
             <ModalFooter>
-              <Button colorScheme="blue" mr={3} onClick={handleSubmit(user => dispatch(saveUser({ user })))}>
-                Save
-              </Button>
+              {openEditUser ?
+                <Button colorScheme="blue" mr={3} onClick={handleSubmit(_updateUser)}>
+                  Update
+                </Button>
+                :
+                <Button colorScheme="blue" mr={3} onClick={handleSubmit(_createUser)}>
+                  Save
+                </Button>
+              }
               <Button onClick={onClose}>Cancel</Button>
             </ModalFooter>
           </form>

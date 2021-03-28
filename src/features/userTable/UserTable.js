@@ -1,9 +1,7 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect } from 'react';
 import styles from './UserTable.module.css';
-import { useDispatch } from 'react-redux';
-import {
-  deleteUser,
-} from './userTableSlice';
+import { useDispatch, connect } from 'react-redux';
+import { deleteUserById, getAllUsers } from './userTableSlice';
 import { toggleUserForm } from '../userForm/userFormSlice';
 import {
   Table,
@@ -20,32 +18,33 @@ import {
   DeleteIcon,
 } from "@chakra-ui/icons"
 
-export function UserTable() {
-  const dispatch = useDispatch();
-  const [error, setError] = useState(null);
-  const [isLoaded, setIsLoaded] = useState(false);
-  const [users, setUsers] = useState([]);
+const mapStateToProps = ({ userTable }) => {
+  return {
+    ...userTable,
+    users: userTable.users.map(user => {
+      const d = new Date(user.dob)
+      const datestring = (d.getMonth()+1).toString().padStart(2,'0') + "-" + d.getDate().toString().padStart(2,'0') + "-" + d.getFullYear()
+      return {
+        ...user,
+        dob: datestring,
+      };
+    })
+  }
+};
 
-  const _editUser = userId => {
+const UserTable = ({ users, isLoaded, error }) => {
+  const dispatch = useDispatch();
+
+  const editUser = userId => {
     const user = users.find(({ id }) => userId === id);
-    console.log('_edit user', user)
     dispatch(toggleUserForm(user));
   };
+  const deleteUser = userId => {
+    dispatch(deleteUserById({ userId }));
+    dispatch(getAllUsers())
+  };
 
-  useEffect(() => {
-    fetch("https://my-json-server.typicode.com/Outc4sted/anchore-app/users")
-      .then(res => res.json())
-      .then(
-        result => {
-          setIsLoaded(true);
-          setUsers(result);
-        },
-        error => {
-          setIsLoaded(true);
-          setError(error);
-        }
-      )
-  }, [])
+  useEffect(() => dispatch(getAllUsers()), [dispatch]);
 
   if (error)
     return <div>Error: {error.message}</div>;
@@ -77,7 +76,7 @@ export function UserTable() {
           address,
           notes,
         }) =>
-          <Tr key={phone}>
+          <Tr key={userId}>
             <Td>{firstName}</Td>
             <Td>{lastName}</Td>
             <Td>{dob}</Td>
@@ -89,11 +88,11 @@ export function UserTable() {
                 className={styles['first-button']}
                 aria-label="Edit user"
                 icon={<EditIcon />}
-                onClick ={() => _editUser(userId)}/>
+                onClick ={() => editUser(userId)}/>
               <IconButton
                 aria-label="Delete user"
                 icon={<DeleteIcon />}
-                onClick={() => dispatch(deleteUser(userId))}/>
+                onClick={() => deleteUser(userId)}/>
             </Td>
           </Tr>
         )
@@ -110,3 +109,5 @@ export function UserTable() {
     </Table>
   );
 }
+
+export default connect(mapStateToProps)(UserTable);

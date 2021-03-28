@@ -1,7 +1,7 @@
 import React from 'react';
 import logo from './logo.svg';
 import UserForm from './features/userForm';
-import { UserTable } from './features/userTable/UserTable';
+import UserTable from './features/userTable';
 import './App.css';
 
 function App() {

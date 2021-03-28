@@ -1,51 +1,58 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { anchoreUserApi } from '../../app/constants';
+
+const initialState = {
+  user: {
+    firstName: null,
+    lastName: null,
+    dob: null,
+    phone: null,
+    address: null,
+    notes: null,
+  },
+  openEditUser: false,
+};
+
+export const createUser = createAsyncThunk(
+  `users`,
+  async ({ user }) => await fetch(`${anchoreUserApi}/users`, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user)
+  })
+  .then(res => res.json()),
+);
+
+export const updateUser = createAsyncThunk(
+  `PUT-users/:userId`,
+  async ({ user }) => await fetch(`${anchoreUserApi}/users/${user.id}`, {
+    method: 'PUT',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(user)
+  })
+  .then(res => res.json()),
+);
 
 export const userFormSlice = createSlice({
   name: 'userForm',
-  initialState: {
-    user: {
-      firstName: null,
-      lastName: null,
-      dob: null,
-      phone: null,
-      address: null,
-      notes: null,
-    },
-    openEditUser: false,
-  },
+  initialState,
   reducers: {
     toggleUserForm: (state, data) => {
       state.openEditUser = !state.openEditUser;
-      state.user = data?.payload || {};
-    },
-    saveUser: async (state, {payload: { user }}) => {
-      console.log('saveUser - user', user)
-
-      const response = await fetch("https://my-json-server.typicode.com/Outc4sted/anchore-app/users", {
-        method: 'POST',
-        headers: {
-          'Content-Type': 'application/json'
-        },
-        body: JSON.stringify(user)
-      })
-        .then(res => res.json())
-        .then(
-          result => {
-            console.log('result', result)
-          },
-          error => {
-            console.log('error', error)
-          }
-        );
-      return response.json()
+      state.user = data?.payload || initialState.user;
     },
   },
+  extraReducers: {
+    [createUser.fulfilled]: state => {
+      state.openEditUser = false;
+    },
+    [updateUser.fulfilled]: state => {
+      state.openEditUser = false;
+    },
+  }
 });
 
-export const { toggleUserForm, saveUser } = userFormSlice.actions;
-
-
-export const selectOpenEditUser = ({ userForm }) => userForm.openEditUser;
+export const { toggleUserForm } = userFormSlice.actions;
 
 
 export default userFormSlice.reducer;

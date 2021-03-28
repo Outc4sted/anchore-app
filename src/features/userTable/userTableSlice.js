@@ -1,4 +1,19 @@
-import { createSlice } from '@reduxjs/toolkit';
+import { createAsyncThunk, createSlice } from '@reduxjs/toolkit';
+import { anchoreUserApi } from '../../app/constants';
+
+export const getAllUsers = createAsyncThunk(
+  `users`,
+  async () => await fetch(`${anchoreUserApi}/users`)
+    .then(res => res.json()),
+);
+
+export const deleteUserById = createAsyncThunk(
+  `users/:userId`,
+  async ({ userId }) => await fetch(`${anchoreUserApi}/users/${userId}`, {
+    method: 'DELETE',
+  })
+  .then(res => res.json()),
+);
 
 export const userTableSlice = createSlice({
   name: 'userTable',
@@ -7,13 +22,12 @@ export const userTableSlice = createSlice({
     isLoaded: false,
     error: null,
   },
-  reducers: {
-    deleteUser: (userId) => {
-      console.log('deleteUser id', userId);
+  extraReducers: {
+    [getAllUsers.fulfilled]: (state, action) => {
+      state.users = Array.isArray(action.payload) ? action.payload : [];
+      state.isLoaded = true;
     },
-  },
+  }
 });
-
-export const { addUser, editUser, deleteUser } = userTableSlice.actions;
 
 export default userTableSlice.reducer;
