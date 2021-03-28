@@ -1,5 +1,5 @@
 # Anchore App Challenge
-![anchoregif](https://user-images.githubusercontent.com/1120154/112769595-c7a22e00-8fd6-11eb-8464-16aff4046833.gif)
+![anchoregif](https://user-images.githubusercontent.com/1120154/112769949-dd185780-8fd8-11eb-80f9-f495643125a2.gif)
 
 ## Getting Started
 
