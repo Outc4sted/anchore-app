@@ -27,7 +27,7 @@ export const userTableSlice = createSlice({
       state.users = Array.isArray(action.payload) ? action.payload : [];
       state.isLoaded = true;
     },
-    [getAllUsers.rejected]: (state, action) => {
+    [getAllUsers.rejected]: state => {
       state.isLoaded = true;
     },
   }

@@ -53,60 +53,62 @@ const UserTable = ({ users, isLoaded, error }) => {
     return <div>Loading...</div>;
 
   else return (
-    <Table variant="striped" colorScheme="blue">
-      <TableCaption>This app brought to you by Justen Falk</TableCaption>
-      <Thead>
-        <Tr>
-          <Th>First Name</Th>
-          <Th>Last Name</Th>
-          <Th>DOB</Th>
-          <Th>Phone</Th>
-          <Th>Address</Th>
-          <Th>Notes</Th>
-          <Th></Th>
-        </Tr>
-      </Thead>
-      <Tbody>
-        {users.length ? users.map(({
-          id: userId,
-          firstName,
-          lastName,
-          dob,
-          phone,
-          address,
-          notes,
-        }) =>
-          <Tr key={userId}>
-            <Td>{firstName}</Td>
-            <Td>{lastName}</Td>
-            <Td>{dob}</Td>
-            <Td>{phone}</Td>
-            <Td>{address}</Td>
-            <Td>{notes || 'n/a'}</Td>
-            <Td className={styles['text-right']}>
-              <IconButton
-                className={styles['first-button']}
-                aria-label="Edit user"
-                icon={<EditIcon />}
-                onClick ={() => editUser(userId)}/>
-              <IconButton
-                aria-label="Delete user"
-                icon={<DeleteIcon />}
-                onClick={() => deleteUser(userId)}/>
-            </Td>
+    <div className={styles.['table-container']}>
+      <Table variant="striped" colorScheme="blue">
+        <TableCaption>This app brought to you by Justen Falk</TableCaption>
+        <Thead>
+          <Tr>
+            <Th>First Name</Th>
+            <Th>Last Name</Th>
+            <Th>DOB</Th>
+            <Th>Phone</Th>
+            <Th>Address</Th>
+            <Th>Notes</Th>
+            <Th></Th>
           </Tr>
-        )
-        : <Tr>
-            <Td
-              className={styles['text-center']}
-              colSpan="7"
-            >
-              Where ya peeps at?
-            </Td>
-          </Tr>
-      }
-      </Tbody>
-    </Table>
+        </Thead>
+        <Tbody>
+          {users.length ? users.map(({
+            id: userId,
+            firstName,
+            lastName,
+            dob,
+            phone,
+            address,
+            notes,
+          }) =>
+            <Tr key={userId}>
+              <Td>{firstName}</Td>
+              <Td>{lastName}</Td>
+              <Td>{dob}</Td>
+              <Td>{phone}</Td>
+              <Td>{address}</Td>
+              <Td>{notes || 'n/a'}</Td>
+              <Td className={styles['text-right']}>
+                <IconButton
+                  className={styles['first-button']}
+                  aria-label="Edit user"
+                  icon={<EditIcon />}
+                  onClick ={() => editUser(userId)}/>
+                <IconButton
+                  aria-label="Delete user"
+                  icon={<DeleteIcon />}
+                  onClick={() => deleteUser(userId)}/>
+              </Td>
+            </Tr>
+          )
+          : <Tr>
+              <Td
+                className={styles['text-center']}
+                colSpan="7"
+              >
+                Where ya peeps at?
+              </Td>
+            </Tr>
+        }
+        </Tbody>
+      </Table>
+    </div>
   );
 }
 

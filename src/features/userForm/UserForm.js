@@ -87,13 +87,14 @@ const UserForm = ({ currentUser, openEditUser }) => {
         <ModalOverlay />
         <ModalContent>
           <form>
-            <ModalHeader>Add a new user</ModalHeader>
+            <ModalHeader>Add a New User</ModalHeader>
             <ModalCloseButton />
             <ModalBody pb={6}>
               <FormControl
                 isRequired
                 isInvalid={!!errors?.firstName?.message}
                 errortext={errors?.firstName?.message}
+                className={styles['form-control']}
               >
                 <FormLabel>First name</FormLabel>
                 <Input
@@ -108,6 +109,7 @@ const UserForm = ({ currentUser, openEditUser }) => {
                 isRequired
                 isInvalid={!!errors?.lastName?.message}
                 errortext={errors?.lastName?.message}
+                className={styles['form-control']}
               >
                 <FormLabel>Last name</FormLabel>
                 <Input
@@ -122,6 +124,7 @@ const UserForm = ({ currentUser, openEditUser }) => {
                 isRequired
                 isInvalid={!!errors?.dob?.message}
                 errortext={errors?.dob?.message}
+                className={styles['form-control']}
               >
                 <FormLabel>Date of birth</FormLabel>
                 <Input
@@ -137,6 +140,7 @@ const UserForm = ({ currentUser, openEditUser }) => {
                 isRequired
                 isInvalid={!!errors?.phone?.message}
                 errortext={errors?.phone?.message}
+                className={styles['form-control']}
               >
                 <FormLabel>Phone</FormLabel>
                 <Input
@@ -151,6 +155,7 @@ const UserForm = ({ currentUser, openEditUser }) => {
                 isRequired
                 isInvalid={!!errors?.address?.message}
                 errortext={errors?.address?.message}
+                className={styles['form-control']}
               >
                 <FormLabel>Address</FormLabel>
                 <Input
@@ -161,7 +166,9 @@ const UserForm = ({ currentUser, openEditUser }) => {
                 <FormErrorMessage>{errors?.address?.message}</FormErrorMessage>
               </FormControl>
 
-              <FormControl>
+              <FormControl
+                className={styles['form-control']}
+              >
                 <FormLabel>Notes</FormLabel>
                 <Textarea
                   placeholder="I need to remember this..."
