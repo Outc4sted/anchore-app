@@ -54,7 +54,7 @@ const mapStateToProps = ({ userForm }) => {
 const UserForm = ({ currentUser, openEditUser }) => {
   const dispatch = useDispatch();
   const { isOpen, onOpen, onClose } = useDisclosure({
-    onClose: () => dispatch(toggleUserForm()),
+    onClose: () => dispatch(toggleUserForm({ forceToggle: false })),
   });
   const { register, handleSubmit, errors } = useForm({
     mode: 'onBlur',

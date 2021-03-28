@@ -37,9 +37,9 @@ export const userFormSlice = createSlice({
   name: 'userForm',
   initialState,
   reducers: {
-    toggleUserForm: (state, data) => {
-      state.openEditUser = !state.openEditUser;
-      state.user = data?.payload || initialState.user;
+    toggleUserForm: (state, { payload }) => {
+      state.openEditUser = payload.forceToggle !== undefined ? payload.forceToggle : !state.openEditUser;
+      state.user = payload || initialState.user;
     },
   },
   extraReducers: {
